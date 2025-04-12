@@ -3,6 +3,7 @@
     "description": "Copy an item from the PoE trade site in a format for PoB, similar to the Ctrl+C copy from in game.",
     "version": "1.0",
     "manifest_version": 3,
+    "permissions": ["activeTab", "clipboardWrite", "scripting"],
     "icons": {
         "16": "images/logo.png",
         "32": "images/logo.png",
