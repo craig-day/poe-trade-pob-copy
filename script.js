@@ -39,7 +39,7 @@ const augmentableAttrToText = (element) => {
         return value + "\n";
     }
 
-    console.warn(`[PoB Copy] Failed to find value for property, ignoring.`, element);
+    console.warn('[PoE Trade to PoB] Failed to find value for property, ignoring.', element);
     return null;
 }
 
@@ -58,7 +58,7 @@ const requirementsToText = (element) => {
         return value + "\n";
     }
 
-    console.warn(`[PoB Copy] Failed to find value for property, ignoring.`, element);
+    console.warn('[PoE Trade to PoB] Failed to find value for property, ignoring.', element);
     return null;
 }
 
@@ -70,7 +70,7 @@ const processItemRow = (row) => {
         return;
     }
 
-    // TODO: get item type
+    // TODO: get item type/class
     // TODO: get item rarity
 
     // Basic descriptors
@@ -160,8 +160,8 @@ const processItemRow = (row) => {
                                 copyBtn.removeAttribute('disabled');
                             }, 3000);
                         },
-                        () => {
-                            // Failed
+                        (error) => {
+                            console.error('[PoE Trade to PoB] failed to copy item to clipboard', error);
                         }
                     )
                 }
@@ -178,6 +178,7 @@ const processItemRow = (row) => {
     }
 }
 
+// Watch for rows being added to the resultset
 const mainObserver = new MutationObserver(mutations => {
     for (const mutation of mutations) {
         if (mutation.type === "childList") {
@@ -191,13 +192,18 @@ const mainObserver = new MutationObserver(mutations => {
     }
 });
 
+// This runs as soon as the extension is injected into the page and the resultset
+// might not be there yet. Watch for it to show up, then switch to watching for
+// changes to the resultset.
 const initObserver = new MutationObserver((mutations, observer) => {
-    console.debug('[PoB Copy] init observer callback');
+    console.debug('[PoE Trade to PoB] init observer callback');
     for (const mutation of mutations) {
         if (mutation.type === "childList") {
             const resultSet = document.querySelector('div.resultset');
             if (resultSet) {
-                console.debug('[PoB Copy] switching from init observer to main observer');
+                // resultset is now present, should be safe to switch to observing it
+                // TODO: when the site first load and you search for the first time, this doesn't always fire
+                console.debug('[PoE Trade to PoB] switching from init observer to main observer');
                 observer.disconnect();
                 mainObserver.observe(resultSet, { childList: true });
             }
@@ -205,5 +211,5 @@ const initObserver = new MutationObserver((mutations, observer) => {
     }
 });
 
-console.debug('[PoB Copy] starting init observer');
+console.debug('[PoE Trade to PoB] starting init observer');
 initObserver.observe(document.body, { childList: true, subtree: true });
