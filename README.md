@@ -1,4 +1,4 @@
-# poe-trade-pob-copy
+# poe-trade-to-pob
 A Chrome extension to allow copying an item from the trade site to paste into Path of Building.
 Tries to mimic the format from Ctrl+C on an item from the game itself.
 
@@ -31,6 +31,8 @@ Gain 25% of Damage as Extra Fire Damage
 
 - [ ] Handle implicit modifiers better in PoE2, like mods from Runes
 - [ ] Detect corrupted
+- [ ] Better detection for augmented requirements/attributes
+- [ ] Proper handling of hybrid attribute requirements regarding augmented 
 
 ## Issues
 
